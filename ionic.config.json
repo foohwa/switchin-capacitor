@@ -1,0 +1,7 @@
+{
+  "name": "switch_in_testing",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
