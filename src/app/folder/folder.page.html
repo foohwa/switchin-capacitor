@@ -29,7 +29,7 @@
       </ion-card-header>
       <ion-card-content>
         <ion-button color="success" (click)="loginUser()">Login</ion-button>
-        <ion-button color="warning" (click)="logoutUser()">Logout</ion-button>
+        <ion-button color="danger" (click)="logoutUser()">Logout</ion-button>
         <p class="ion-padding-top">Status: {{ status }}</p>
         <p *ngIf="uid | async" class="ion-padding-top">UID: {{ uid | async }}</p>
       </ion-card-content>
