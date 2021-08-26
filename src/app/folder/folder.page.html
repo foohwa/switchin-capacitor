@@ -7,15 +7,163 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content class="ion-text-center" [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">{{ folder }}</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <div id="container">
-    <strong class="capitalize">{{ folder }}</strong>
-    <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <!--  <div id="container">-->
+  <!--    <strong class="capitalize">{{ folder }}</strong>-->
+  <!--    <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI-->
+  <!--      Components</a></p>-->
+
+  <div class="ion-margin-top">
+    <ion-button color="warning" (click)="openCamera()">Open Camera</ion-button>
+    <ion-button color="success" (click)="getCurrentLocation()">Detect my location</ion-button>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Auth</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-button color="success" (click)="loginUser()">Login</ion-button>
+        <ion-button color="warning" (click)="logoutUser()">Logout</ion-button>
+        <p class="ion-padding-top">Status: {{ status }}</p>
+        <p *ngIf="uid | async" class="ion-padding-top">UID: {{ uid | async }}</p>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="ion-margin-top">
+      <ion-card-header>
+        <ion-card-title>SweetAlert2</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-button (click)="triggerButton()">Try Me!</ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="deviceInfo" class="ion-margin-top">
+      <ion-card-header>
+        <ion-card-title>App Info</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <p *ngIf="deviceInfo">{{ deviceInfo | json }}</p>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="coordinates" class="ion-margin-top">
+      <ion-card-header>
+        <ion-card-title>Coordinates</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <p *ngIf="coordinates">{{ coordinates }}</p>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="selectedImage" class="ion-margin-top">
+      <ion-card-header>
+        <ion-card-title>Selected Image</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-img *ngIf="selectedImage" [src]="selectedImage"></ion-img>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Google Maps</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div style="width: 100%">
+          <iframe width="100%" height="300" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
+                  src="https://maps.google.com/maps?width=100%25&amp;height=300&amp;hl=en&amp;q=7th%20Tone%20Creative,%20No.2,%203rd%20Floor,%20Jalan%20Kaskas,%20Taman%20Cheras,%2056100%20Kuala%20Lumpur,%20Federal%20Territory%20of%20Kuala%20Lumpur+(My%20Business%20Name)&amp;t=&amp;z=16&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+          <a href="https://www.maps.ie/draw-radius-circle-map/">Google radius map</a></div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-grid *ngIf="platformWidth > 1200">
+      <ion-row>
+        <ion-col sizeXs="6" sizeMd="6" sizeLg="4" sizeXl="3" *ngFor="let deal of deals | async">
+          <ion-card mode="ios" class="ion-text-left" >
+            <div class="imageHeader">
+              <img src="https://images.unsplash.com/photo-1508997449629-303059a039c0?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"/>
+              <div *ngIf="deal.recommended" class="recommendedSticker">
+                <ion-icon name="flame"></ion-icon>{{ 'Recommended' | uppercase}}
+              </div>
+              <div class="favouriteButton" (click)="deal.favourite = !deal.favourite">
+                <ion-icon color="danger" [name]="deal.favourite ? 'heart' : 'heart-outline'"></ion-icon>
+              </div>
+            </div>
+
+            <ion-card-header>
+              <ion-card-subtitle  color="warning">{{ deal.category }}</ion-card-subtitle>
+              <ion-card-title>{{ deal.title }}</ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+              <p *ngIf="deal.merchant" class="ion-no-margin ion-no-padding">Product by <ion-text color="danger">{{ deal.merchant }}</ion-text></p>
+              <ion-note style="font-size: 18px">{{ deal.description }}</ion-note>
+
+              <div class="price">
+                <div class="discount">
+                  <div class="discountTag">SPECIAL PRICE</div>
+                  <div class="discountPrice">{{ deal.discountedPrice | currency: 'RM ' : 'symbol': '3.2-2' }}</div>
+                </div>
+                <h1>{{ deal.originalPrice | currency: 'RM ' : 'symbol': '3.2-2'  }}</h1>
+              </div>
+
+              <ion-button tabindex="null" size="large" color="danger" expand="block" [routerLink]="['/', 'details', deal.id]">View Deal</ion-button>
+
+              <div class="views"><ion-text color="warning">{{ deal.views }} views</ion-text></div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-slides *ngIf="platformWidth < 1200">
+      <ion-slide *ngFor="let deal of deals | async">
+        <ion-card mode="ios" class="ion-text-left" >
+          <div class="imageHeader">
+            <img src="https://images.unsplash.com/photo-1508997449629-303059a039c0?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"/>
+            <div *ngIf="deal.recommended" class="recommendedSticker">
+              <ion-icon name="flame"></ion-icon>{{ 'Recommended' | uppercase}}
+            </div>
+            <div class="favouriteButton" (click)="deal.favourite = !deal.favourite">
+              <ion-icon color="danger" [name]="deal.favourite ? 'heart' : 'heart-outline'"></ion-icon>
+            </div>
+          </div>
+
+          <ion-card-header>
+            <ion-card-subtitle  color="warning">{{ deal.category }}</ion-card-subtitle>
+            <ion-card-title>{{ deal.title }}</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            <p *ngIf="deal.merchant" class="ion-no-margin ion-no-padding">Product by <ion-text color="danger">{{ deal.merchant }}</ion-text></p>
+            <ion-note style="font-size: 18px">{{ deal.description }}</ion-note>
+
+            <div class="price">
+              <div class="discount">
+                <div class="discountTag">SPECIAL PRICE</div>
+                <div class="discountPrice">{{ deal.discountedPrice | currency: 'RM ' : 'symbol': '3.2-2' }}</div>
+              </div>
+              <h1>{{ deal.originalPrice | currency: 'RM ' : 'symbol': '3.2-2'  }}</h1>
+            </div>
+
+            <ion-button tabindex="null" size="large" color="danger" expand="block" [routerLink]="['/', 'details', deal.id]">View Deal</ion-button>
+
+            <div class="views"><ion-text color="warning">{{ deal.views }} views</ion-text></div>
+          </ion-card-content>
+        </ion-card>
+      </ion-slide>
+    </ion-slides>
   </div>
+  <!--  </div>-->
 </ion-content>

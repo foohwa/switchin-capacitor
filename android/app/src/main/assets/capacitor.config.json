@@ -1,0 +1,6 @@
+{
+	"appId": "io.testing.switchindev",
+	"appName": "switch_in_testing",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}

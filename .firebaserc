@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "ionictestingcapacitor"
+  },
+  "targets": {
+    "switchin-capacitor": {
+      "hosting": {
+        "app": [
+          "switchin-capacitor"
+        ]
+      }
+    }
+  }
+}
